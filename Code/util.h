@@ -1,8 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 #include<iostream>
-//#include<conio.h>
-
+#include<conio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<fstream>
@@ -13,25 +12,17 @@
 #include<cstdio>
 #include<limits.h>
 #include<bits/stdc++.h>
-
-#include<iostream>
-#include<fstream>
-#include<bits/stdc++.h>
-#include<string>
 #include<sstream>
 #include<unistd.h>
-
-#include<string.h>
 #include<cstdlib>
-#include<unistd.h>
 #include<ctime>
-
-#include<bits/stdc++.h>
 using namespace std;
 /*
+// as getch was not working in linux beacuse it does not support conio.h
+
 char _getch(){
 
-  struct termios oldt, newt;	// as getch was not working in linux beacuse it does not support conio.h
+  struct termios oldt, newt;
   int ch;
   tcgetattr (STDIN_FILENO, &oldt);
   newt = oldt;
@@ -85,11 +76,6 @@ void professor_login();
 #include"Students.cpp"
 #include"Question.cpp"
 #include"professor.cpp"
-//#include"databaseManager.cpp"
 #include"Functions.cpp"
-
-//databaseManager db;
-
-			//------  // function for get_ch
 
 #endif

@@ -17,170 +17,13 @@ public:
     void settings();
     void configure();
 };
-void databaseManager:: settings()
-{
-    system("cls");
-
-    cout<<"********************************************************************************"<<endl;
-    cout<<"                                  ::SETTINGS::                                  "<<endl<<endl;
-    cout<<"********************************************************************************"<<endl;
-    cout<<"CURRENT SETTINGS : "<<endl<<endl;
-    cout<<"1. ADMIN PASSWORD : "<<password<<endl;
-    cout<<"2. STUDENT DATABASE FILENAME : "<<app_file_name<<endl;
-    cout<<"3. QUESTIONS DATABASE FILENAME : "<<endl;
-    for(int i=0; i<4; i++)
-        cout<<"\t"<<ques_file_name[i]<<endl;
-    cout<<"4. MARKS AWARDED FOR RIGHT ANSWER : "<<positive_mark<<endl;
-    cout<<"5. MARKS DEDUCTED FOR WRONG ANSWER : "<<negative_mark<<endl;
-    cout<<"6. NUMBER OF QUESTIONS TO BE ASKED IN THE TEST : "<<no_of_ques_to_ask<<endl<<endl;
-    cout<<"DO YOU WANT TO CHANGE THE SETTINGS? (y/n) : ";
-    char ch[100];
-    cin.ignore();
-    cin.getline(ch,100);
-    if(strcmp(ch,"y")==0||strcmp(ch,"Y")==0)
-    {
-        cout<<"\nNOTE : If invalid inputs are entered, the settings remain unchanged\n\n";
-        Questions config_obj;
-        ofstream config_file;
-        config_file.open("config.dat",ios::out|ios::trunc|ios::binary);
-        cout<<"\nENTER NEW ADMIN PASSWORD OR ENTER X TO DO NOT CHANGE : ";
-        //cin.ignore();
-        cin.getline(new_password,30);
-        if((strcmp(new_password,"x")!=0)&&(strcmp(new_password,"X")!=0))
-        {
-            config_obj.set_password(new_password);
-        }
-        else
-        {
-            config_obj.set_password(password);
-        }
-        cout<<"\nENTER NEW FILENAME FOR STUDENT DATABASE OR ENTER X TO DO NOT CHANGE : ";
-        cin.getline(new_app_file_name,100);
-        if((strcmp(new_app_file_name,"x")!=0)&&(strcmp(new_app_file_name,"X")!=0))
-        {
-            config_obj.set_app_file_name(new_app_file_name);
-        }
-        else
-        {
-            config_obj.set_app_file_name(app_file_name);
-        }
-        cout<<"\nENTER NEW FILENAME FOR QUESTION DATABASE OR ENTER X FOR NO CHANGE : ";
-        cin.getline(new_ques_file_name,100);
-        if((strcmp(new_ques_file_name,"x")!=0)&&(strcmp(new_ques_file_name,"X")!=0))
-        {
-            /*
-               int n;
-            valid1:
-               cout<<"\nEnter the courseID for the FILENAME (1.English, 2.Physics, 3.Chemistry, 4.Maths) : ";
-               cin>>n;
-               if(cin.fail())
-               {
-                   cin.clear();
-                   cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                   cout<<"\nINVALID COURSEID";
-                   goto valid1;
-               }
-               if(add_type<1 || add_type>4)
-               {
-                   system("cls");
-                   cout<<"\nPLEASE ENTER VALID COURSEID"<<endl;
-                   goto valid1;
-               }*/
-            config_obj.set_ques_file_name(new_ques_file_name);
-        }
-        else
-        {
-            config_obj.set_ques_file_name(ques_file_name[0]);               //to be checked again
-        }
-        cout<<"\nENTER MARKS TO BE AWARDED FOR RIGHT ANSWER OR ENTER -1(MINUS ONE) TO DO NOT CHANGE:";
-        cin>>new_positive_mark;
-        if(cin.fail())
-        {
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            config_obj.set_positive_mark(positive_mark);
-        }
-        else if(new_positive_mark>=0 && new_positive_mark<=100)
-        {
-            config_obj.set_positive_mark(new_positive_mark);
-        }
-        else
-        {
-            config_obj.set_positive_mark(positive_mark);
-        }
-        cout<<"\nENTER MARKS TO BE DEDUCTED FOR WRONG ANSWER OR ENTER -1(MINUS ONE) TO DO NOT CHANGE:";
-        cin>>new_negative_mark;
-        if(cin.fail())
-        {
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            config_obj.set_negative_mark(negative_mark);
-        }
-        else if(new_negative_mark>=0 && new_negative_mark<=100)
-        {
-            config_obj.set_negative_mark(new_negative_mark);
-        }
-        else
-        {
-            config_obj.set_negative_mark(negative_mark);
-        }
-        cout<<"\nENTER NUMBER OF QUESTIONS TO BE ASKED IN TEST OR ENTER -1(MINUS ONE) TO DO NOT CHANGE:";
-        cin>>new_no_of_ques_to_ask;
-        if(cin.fail())
-        {
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            config_obj.set_no_of_ques_to_ask(no_of_ques_to_ask);
-        }
-        else if(new_no_of_ques_to_ask>=1 && new_no_of_ques_to_ask<=10)
-        {
-            config_obj.set_no_of_ques_to_ask(new_no_of_ques_to_ask);
-            cin.ignore();
-        }
-        else
-        {
-            config_obj.set_no_of_ques_to_ask(no_of_ques_to_ask);
-            cin.ignore();
-        }
-
-        config_file.write((char*)&config_obj,sizeof(config_obj));
-        cout<<"\n\nCHANGES UPDATED SUCCESSFULLY\n\n";
-
-        cout<<"PRESS ANY KEY TO GO BACK TO ADMIN PANEL";
-        _getch();
-
-        config_file.close();
-        configure();
-    }
-    system("cls");
-    professor_login();;
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void databaseManager:: configure()
-{
-    Questions config_obj;
-    fstream config_file;
-    config_file.open("config.dat",ios::in|ios::binary);
-    cout<<config_file;
-    if(config_file)
-    {
-        config_file.read((char*)&config_obj,sizeof(config_obj));
-        strcpy(password, config_obj.get_password());
-        positive_mark=config_obj.get_positive_mark();
-        negative_mark=config_obj.get_negative_mark();
-        no_of_ques_to_ask=config_obj.get_no_of_ques_to_ask();
-
-        //strcpy(app_file_name,config_obj.get_app_file_name());
-        //strcpy(ques_file_name,config_obj.get_ques_file_name());
-    }
-    config_file.close();
-}
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void databaseManager:: show_questions_database()
 {
+    int counter=0;
+    int c=0;
     system("cls");
     Questions t3_question;
-    //int t;
     ifstream fin;
     cout.setf(ios::left);
     cout<<"ID"<<setw(3)<<"COURSE"<<setw(11)<<"QUES"<<setw(11)<<"OPT1"<<setw(11)<<"OPT2"<<setw(11)<<"OPT3"<<setw(11)<<"OPT4"<<setw(2)<<"ANS"<<endl;
@@ -191,7 +34,7 @@ void databaseManager:: show_questions_database()
         while(fin.read((char*)&t3_question,sizeof(t3_question)))
         {
             cout.setf(ios::left);
-            cout<<setw(3)<<t3_question.get_id();
+            cout<<setw(3)<<counter+t3_question.get_id();
             cout<<setw(3)<<t3_question.get_type();
             cout<<setw(16);
             t3_question.get_short_ques();
@@ -210,16 +53,17 @@ void databaseManager:: show_questions_database()
             cout<<' ';
             cout<<setw(2);
             cout<<t3_question.get_ans()<<endl;
+            c++;
         }
         fin.close();
-        cout<<endl;
+        counter=c;
     }
     cin.ignore();
     cout<<"PRESS ANY KEY TO RETURN TO THE ADMIN PANEL";
     _getch();
     cout<<endl<<endl;
-
-    system("cls"); professor_login();;
+    system("cls");
+    professor_login();;
 }
 //////////////////////////////////////////////////////////////////////////////////////
 void databaseManager:: enter_questions()
@@ -342,14 +186,13 @@ void databaseManager:: edit_student()                 //exception handling
             cout<<"ENTER NEW FIRST NAME OR ENTER X TO DO NOT CHANGE:";
             cin.ignore();
             cin.getline(ed_new_faname,50);
-            //cin>>ed_new_faname;
             if((strcmp(ed_new_faname,"x")!=0)&&(strcmp(ed_new_faname,"X")!=0))
             {
                 ed_obj.set_faname(ed_new_faname);
             }
+
             cout<<"ENTER NEW LAST NAME OR ENTER X TO DO NOT CHANGE:";
             cin.getline(ed_new_maname,50);
-            //cin>>ed_new_maname;
             if((strcmp(ed_new_maname,"x")!=0)&&(strcmp(ed_new_maname,"X")!=0))
             {
                 ed_obj.set_maname(ed_new_maname);
@@ -414,7 +257,6 @@ void databaseManager:: edit_student()                 //exception handling
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void databaseManager:: show_student_database()
 {
@@ -448,16 +290,6 @@ void databaseManager:: show_student_database()
             cout<<setw(5)<<"N/A";
         }
         cout<<setw(4)<<t3_student.no_of_appeared_tests<<endl;
-        /*
-        if(t3_student.get_marks()!=-500)
-        {
-            cout<<setw(4)<<t3_student.get_marks()<<endl;
-        }
-        else
-        {
-            cout<<setw(4)<<"N/A"<<endl;
-        }
-        */
     }
     fin.close();
     cout<<endl;
@@ -495,12 +327,11 @@ day3:
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         goto day3;
     }
-
+month3:
     cout<<"ENTER VALID MONTH (e.g., 1, 2, 3, 4, ....11, 12 ) : ";
     cin>>get_m;
     if(cin.fail())
     {
-month3:
         cin.clear();
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         goto month3;
@@ -546,16 +377,6 @@ year3:
             cout<<endl;
             t2_student.show_result();
             cout<<endl;
-            /*if(t2_student.get_marks()!=-500)
-            {
-                cout<<"MARKS : "<<t2_student.get_marks()<<" OUT OF "<<no_of_ques_to_ask*positive_mark<<endl;
-                cout<<"********************************************************************************"<<endl;
-            }
-            else
-            {
-                cout<<"MARKS NOT ASSIGNED"<<endl;
-                cout<<"********************************************************************************"<<endl;
-            }*/
             flag=1;
             break;
         }
@@ -795,10 +616,8 @@ finish:
 void databaseManager:: register_now()
 {
     system("cls");
-
     Students t_student;
     ofstream fout;
-    //t_student.set_result(0,0);
     t_student.set_rank(-1);
 
     fout.open(app_file_name, ios::app|ios::binary);
@@ -816,8 +635,6 @@ void databaseManager:: register_now()
     cin.getline(ma,50);
     t_student.set_maname(ma);
     cout<<"DATE OF BIRTH : \n";
-    do
-    {
 day:
         cout<<"ENTER VALID DAY (e.g., 1, 2, 3, 4, ....30, 31 ) : ";
         cin>>dd;
@@ -827,25 +644,28 @@ day:
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             goto day;
         }
-    }
-    while(!((dd>0)&&(dd<32)));
+        else if(dd<1||dd>31)
+        {
+            goto day;
+        }
     t_student.set_dob_d(dd);
-    do
-    {
+
+month:
         cout<<"ENTER VALID MONTH (e.g., 1, 2, 3, 4, ....11, 12 ) : ";
         cin>>dm;
         if(cin.fail())
         {
-month:
+
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             goto month;
         }
-    }
-    while(!((dm>0)&&(dm<13)));
+        else if(dm<1||dm>12)
+        {
+            goto month;
+        }
     t_student.set_dob_m(dm);
-    do
-    {
+
 year:
         cout<<"ENTER VALID YEAR (e.g., 1901, ...2015, 2016 ) : ";
         cin>>dy;
@@ -855,8 +675,10 @@ year:
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             goto year;
         }
-    }
-    while(!((dy>1900)&&(dy<3000)));
+        else if(dy<1901||dy>2016)
+        {
+            goto year;
+        }
     t_student.set_dob_y(dy);
     calc_no_of_Students();
     t_student.set_UserId(no_of_Students+1);
@@ -884,4 +706,123 @@ year:
     main();
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void databaseManager:: settings()
+{
+    system("cls");
+
+    cout<<"********************************************************************************"<<endl;
+    cout<<"                                  ::SETTINGS::                                  "<<endl<<endl;
+    cout<<"********************************************************************************"<<endl;
+    cout<<"CURRENT SETTINGS : "<<endl<<endl;
+    cout<<"1. ADMIN PASSWORD : "<<password<<endl;
+    cout<<"2. STUDENT DATABASE FILENAME : "<<app_file_name<<endl;
+    cout<<"3. QUESTIONS DATABASE FILENAME : "<<endl;
+    for(int i=0; i<4; i++)
+        cout<<"\t"<<ques_file_name[i]<<endl;
+    cout<<"4. MARKS AWARDED FOR RIGHT ANSWER : "<<positive_mark<<endl;
+    cout<<"5. MARKS DEDUCTED FOR WRONG ANSWER : "<<negative_mark<<endl;
+    cout<<"6. NUMBER OF QUESTIONS TO BE ASKED IN THE TEST : "<<no_of_ques_to_ask<<endl<<endl;
+    cout<<"DO YOU WANT TO CHANGE THE SETTINGS? (y/n) : ";
+    char ch[100];
+    cin.ignore();
+    cin.getline(ch,100);
+    if(strcmp(ch,"y")==0||strcmp(ch,"Y")==0)
+    {
+        cout<<"\nNOTE : If invalid inputs are entered, the settings remain unchanged\n\n";
+        Questions config_obj;
+        ofstream config_file;
+        config_file.open("config.dat",ios::out|ios::trunc|ios::binary);
+        cout<<"\nENTER NEW ADMIN PASSWORD OR ENTER X TO DO NOT CHANGE : ";
+        cin.getline(new_password,30);
+        if((strcmp(new_password,"x")!=0)&&(strcmp(new_password,"X")!=0))
+        {
+            config_obj.set_password(new_password);
+        }
+        else
+        {
+            config_obj.set_password(password);
+        }
+
+        cout<<"\nENTER MARKS TO BE AWARDED FOR RIGHT ANSWER OR ENTER -1(MINUS ONE) TO DO NOT CHANGE:";
+        cin>>new_positive_mark;
+        if(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            config_obj.set_positive_mark(positive_mark);
+        }
+        else if(new_positive_mark>=0 && new_positive_mark<=100)
+        {
+            config_obj.set_positive_mark(new_positive_mark);
+        }
+        else
+        {
+            config_obj.set_positive_mark(positive_mark);
+        }
+        cout<<"\nENTER MARKS TO BE DEDUCTED FOR WRONG ANSWER OR ENTER -1(MINUS ONE) TO DO NOT CHANGE:";
+        cin>>new_negative_mark;
+        if(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            config_obj.set_negative_mark(negative_mark);
+        }
+        else if(new_negative_mark>=0 && new_negative_mark<=100)
+        {
+            config_obj.set_negative_mark(new_negative_mark);
+        }
+        else
+        {
+            config_obj.set_negative_mark(negative_mark);
+        }
+        cout<<"\nENTER NUMBER OF QUESTIONS TO BE ASKED IN TEST OR ENTER -1(MINUS ONE) TO DO NOT CHANGE:";
+        cin>>new_no_of_ques_to_ask;
+        if(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            config_obj.set_no_of_ques_to_ask(no_of_ques_to_ask);
+        }
+        else if(new_no_of_ques_to_ask>=1 && new_no_of_ques_to_ask<=10)
+        {
+            config_obj.set_no_of_ques_to_ask(new_no_of_ques_to_ask);
+            cin.ignore();
+        }
+        else
+        {
+            config_obj.set_no_of_ques_to_ask(no_of_ques_to_ask);
+            cin.ignore();
+        }
+
+        config_file.write((char*)&config_obj,sizeof(config_obj));
+        cout<<"\n\nCHANGES UPDATED SUCCESSFULLY\n\n";
+
+        cout<<"PRESS ANY KEY TO GO BACK TO ADMIN PANEL";
+        _getch();
+
+        config_file.close();
+        configure();
+    }
+    system("cls");
+    professor_login();
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void databaseManager:: configure()
+{
+    Questions config_obj;
+    fstream config_file;
+    config_file.open("config.dat",ios::in|ios::binary);
+    cout<<config_file;
+    if(config_file)
+    {
+        config_file.read((char*)&config_obj,sizeof(config_obj));
+        strcpy(password, config_obj.get_password());
+        positive_mark=config_obj.get_positive_mark();
+        negative_mark=config_obj.get_negative_mark();
+        no_of_ques_to_ask=config_obj.get_no_of_ques_to_ask();
+    }
+    config_file.close();
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
 #endif

@@ -40,10 +40,6 @@ public:
     {
         return rank;
     }
-    /* void set_marks(int mk)
-     {
-         marks=mk;
-     }*/
     void set_rank(int rn)
     {
         rank=rn;
