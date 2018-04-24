@@ -7,3 +7,8 @@ New students are added according to their first and last name according to their
 2.Compile and run the file main.cpp
 3.Password of Admin is "password"
 4.Add questions and students in the database if required
+5. An instance of registered student: 
+    Student Id : 1
+    FirstName  : Shreya
+    LastName   : Patel
+    Date Of Birth : 13-10-1997
